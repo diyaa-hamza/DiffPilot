@@ -1,0 +1,172 @@
+{
+  "name": "diffpilot",
+  "displayName": "DiffPilot",
+  "description": "A dedicated review panel for AI-generated code changes. Accept or reject hunks surgically.",
+  "version": "0.1.0",
+  "publisher": "diffpilot",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diyaahamza/DiffPilot"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/src/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "diffpilot",
+          "title": "DiffPilot",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "diffpilot": [
+        {
+          "id": "diffpilot.changedFiles",
+          "name": "Changed Files"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "diffpilot.startSession",
+        "title": "DiffPilot: Start Session",
+        "icon": "$(play)"
+      },
+      {
+        "command": "diffpilot.stopSession",
+        "title": "DiffPilot: Stop Session",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "diffpilot.captureFromGit",
+        "title": "DiffPilot: Capture from Git Diff",
+        "icon": "$(git-compare)"
+      },
+      {
+        "command": "diffpilot.acceptHunk",
+        "title": "DiffPilot: Accept Hunk"
+      },
+      {
+        "command": "diffpilot.rejectHunk",
+        "title": "DiffPilot: Reject Hunk"
+      },
+      {
+        "command": "diffpilot.acceptFile",
+        "title": "DiffPilot: Accept All Hunks in File"
+      },
+      {
+        "command": "diffpilot.rejectFile",
+        "title": "DiffPilot: Reject All Hunks in File"
+      },
+      {
+        "command": "diffpilot.acceptHunkInline",
+        "title": "DiffPilot: Accept Hunk (Inline)"
+      },
+      {
+        "command": "diffpilot.rejectHunkInline",
+        "title": "DiffPilot: Reject Hunk (Inline)"
+      },
+      {
+        "command": "diffpilot.openFileInline",
+        "title": "DiffPilot: Open File with Inline Review"
+      },
+      {
+        "command": "diffpilot.openDiffViewer",
+        "title": "DiffPilot: Open Diff Viewer (Webview)"
+      },
+      {
+        "command": "diffpilot.acceptAllFiles",
+        "title": "DiffPilot: Accept All Files",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "diffpilot.nextHunk",
+        "title": "DiffPilot: Next Hunk"
+      },
+      {
+        "command": "diffpilot.previousHunk",
+        "title": "DiffPilot: Previous Hunk"
+      },
+      {
+        "command": "diffpilot.nextFile",
+        "title": "DiffPilot: Next File"
+      },
+      {
+        "command": "diffpilot.previousFile",
+        "title": "DiffPilot: Previous File"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "diffpilot.startSession",
+          "when": "view == diffpilot.changedFiles && !diffpilotSessionActive",
+          "group": "navigation@1"
+        },
+        {
+          "command": "diffpilot.stopSession",
+          "when": "view == diffpilot.changedFiles && diffpilotSessionActive",
+          "group": "navigation@2"
+        },
+        {
+          "command": "diffpilot.captureFromGit",
+          "when": "view == diffpilot.changedFiles",
+          "group": "navigation@3"
+        },
+        {
+          "command": "diffpilot.acceptAllFiles",
+          "when": "view == diffpilot.changedFiles && diffpilotSessionActive",
+          "group": "navigation@4"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "diffpilot.changedFiles",
+        "contents": "No active session.\n[Start Session](command:diffpilot.startSession)\n[Capture from Git Diff](command:diffpilot.captureFromGit)",
+        "when": "!diffpilotSessionActive"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "diffpilot.acceptHunk",
+        "key": "alt+]",
+        "when": "editorTextFocus && diffpilotViewActive"
+      },
+      {
+        "command": "diffpilot.rejectHunk",
+        "key": "alt+[",
+        "when": "editorTextFocus && diffpilotViewActive"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "node ./out/test/runTests.js",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/diff": "^5.2.1",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.3.8",
+    "mocha": "^10.2.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "diff": "^5.2.0"
+  }
+}

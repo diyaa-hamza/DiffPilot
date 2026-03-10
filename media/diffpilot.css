@@ -1,0 +1,121 @@
+body {
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-foreground);
+  background-color: var(--vscode-editor-background);
+  padding: 0;
+  margin: 0;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  position: sticky;
+  top: 0;
+  background: var(--vscode-editor-background);
+  z-index: 10;
+}
+
+.toolbar h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  padding: 4px 12px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: var(--vscode-font-family);
+}
+
+.btn-sm {
+  padding: 2px 8px;
+  font-size: 11px;
+}
+
+.btn-accept {
+  background-color: var(--vscode-testing-iconPassed, #28a745);
+  color: #fff;
+}
+
+.btn-accept:hover {
+  opacity: 0.85;
+}
+
+.btn-reject {
+  background-color: var(--vscode-testing-iconFailed, #d73a49);
+  color: #fff;
+}
+
+.btn-reject:hover {
+  opacity: 0.85;
+}
+
+.hunks {
+  padding: 8px 16px;
+}
+
+.hunk {
+  margin-bottom: 16px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.hunk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background: var(--vscode-editorGroupHeader-tabsBackground);
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+.hunk-location {
+  font-size: 12px;
+  color: var(--vscode-descriptionForeground);
+}
+
+.hunk-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.hunk-diff {
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: var(--vscode-editor-font-size, 13px);
+  line-height: 1.5;
+}
+
+.line {
+  padding: 1px 12px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.line.removed {
+  background-color: var(--vscode-diffEditor-removedLineBackground, rgba(255, 0, 0, 0.15));
+  color: var(--vscode-diffEditor-removedTextForeground, inherit);
+}
+
+.line.added {
+  background-color: var(--vscode-diffEditor-insertedLineBackground, rgba(0, 255, 0, 0.15));
+  color: var(--vscode-diffEditor-insertedTextForeground, inherit);
+}
+
+.no-changes {
+  padding: 24px;
+  text-align: center;
+  color: var(--vscode-descriptionForeground);
+}

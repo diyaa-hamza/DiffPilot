@@ -1,0 +1,18 @@
+<svg width="1024" height="1024" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Left Wing (Subtractive/Red) -->
+  <path d="M11.5 3L4 17H11.5V3Z" fill="#D73A49"/>
+  
+  <!-- Right Wing (Additive/Green) -->
+  <!-- Designed to subtly suggest a '+' shape in the geometry -->
+  <path d="M12.5 3L20 17H16.5V21H12.5V3Z" fill="#28A745"/>
+  
+  <!-- The Pilot/Spine (Navigation/Blue) -->
+  <path d="M11 3.5L12 2L13 3.5V22H11V3.5Z" fill="#1A73E8"/>
+  
+  <!-- Minimalist Minus Indicator (Negative Space on Red wing) -->
+  <rect x="6.5" y="14" width="3" height="1" fill="white" fill-opacity="0.8"/>
+  
+  <!-- Minimalist Plus Indicator (Negative Space on Green wing) -->
+  <rect x="14.5" y="14" width="3" height="1" fill="white" fill-opacity="0.8"/>
+  <rect x="15.5" y="13" width="1" height="3" fill="white" fill-opacity="0.8"/>
+</svg>
