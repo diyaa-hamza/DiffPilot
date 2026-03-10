@@ -8,20 +8,34 @@ AI coding tools modify multiple files at once. VS Code's built-in diff only show
 
 - **Session-based tracking** — only changes made *during* a session are shown, not your entire git diff
 - **Hunk-level control** — accept or reject individual hunks, not entire files
-- **In-editor review** — inline CodeLens buttons right where the changes are
+- **Inline review** — Undo/Keep buttons and green/red highlighting right where the changes are
 
 ## Features
 
 - **Start/Stop Sessions** — snapshot workspace files, then track only new changes
-- **Capture from Git Diff** — fallback to import existing unstaged git changes as reviewable hunks
-- **Hunk-Level Review** — accept or reject individual diff hunks with inline CodeLens
+- **Capture from Git Diff** — import existing unstaged git changes as reviewable hunks
+- **Inline Hunk Review** — per-hunk `Undo` / `Keep` inlay hint buttons at the end of each changed block
+- **Prominent Diff Highlighting** — saturated green/red line backgrounds with gutter borders
+- **File-Level CodeLens** — `Keep All` / `Undo All` CodeLens above the first hunk in each file
 - **Sidebar Panel** — activity bar view listing all changed files with pending hunk counts
+- **Status Bar Navigation** — navigate between hunks and files from the status bar
 - **Diff Viewer** — webview panel with red/green line diffs and Accept/Reject buttons
-- **File-Level Actions** — Accept All / Reject All per file
-- **Keyboard Shortcuts** — `Alt+]` to accept, `Alt+[` to reject
+- **Keyboard Shortcuts** — `Alt+]` to accept, `Alt+[` to reject the current hunk
 - **Claude Code Integration** — auto-start sessions via a signal file
 
 ## Installation
+
+### From VSIX
+
+```bash
+# VS Code
+code --install-extension diffpilot-0.1.0.vsix
+
+# Cursor
+cursor --install-extension diffpilot-0.1.0.vsix
+```
+
+Or in either editor: `Cmd+Shift+P` → **Extensions: Install from VSIX...** → select the file.
 
 ### From Source
 
@@ -34,22 +48,16 @@ npm run compile
 
 Then press `F5` in VS Code to launch the Extension Development Host.
 
-### From VSIX (coming soon)
-
-```bash
-code --install-extension diffpilot-0.1.0.vsix
-```
-
 ## Usage
 
 ### Quick Start
 
-1. Open a workspace in VS Code or Cursor
-2. Click the **DiffPilot** icon in the Activity Bar (or open the Command Palette)
-3. Click **Start Session** (or run `DiffPilot: Start Session`)
+1. Open a **folder** in VS Code or Cursor (required — the extension needs a workspace)
+2. Click the **DiffPilot** icon in the Activity Bar
+3. Click **Start Session** or **Capture from Git Diff**
 4. Make changes — or let an AI agent make changes
-5. Review hunks in the sidebar or inline in the editor
-6. Accept or reject each hunk individually
+5. Review hunks inline: green lines = added, red lines = deleted
+6. Use the `Undo` / `Keep` buttons at the end of each hunk, or `Keep All` / `Undo All` CodeLens at the top
 7. Click **Stop Session** when done
 
 ### Three Ways to Start
@@ -81,25 +89,31 @@ The extension watches for `.diffpilot-signal` and processes the command automati
 | `DiffPilot: Start Session` | — | Snapshot files and start tracking changes |
 | `DiffPilot: Stop Session` | — | Stop tracking (hunks remain for review) |
 | `DiffPilot: Capture from Git Diff` | — | Import unstaged git changes as hunks |
-| `DiffPilot: Accept Hunk` | `Alt+]` | Accept the current hunk |
-| `DiffPilot: Reject Hunk` | `Alt+[` | Reject the current hunk and restore original |
-| `DiffPilot: Accept All Hunks in File` | — | Accept all pending hunks in a file |
-| `DiffPilot: Reject All Hunks in File` | — | Reject all pending hunks and restore the file |
+| `DiffPilot: Accept Hunk` | `Alt+]` | Accept the current hunk (keep the change) |
+| `DiffPilot: Reject Hunk` | `Alt+[` | Reject the current hunk (restore original) |
+| `DiffPilot: Accept All Hunks in File` | — | Keep all pending hunks in a file |
+| `DiffPilot: Reject All Hunks in File` | — | Undo all pending hunks and restore the file |
+| `DiffPilot: Next Hunk` | — | Navigate to next pending hunk |
+| `DiffPilot: Previous Hunk` | — | Navigate to previous pending hunk |
+| `DiffPilot: Next File` | — | Navigate to next file with pending hunks |
+| `DiffPilot: Previous File` | — | Navigate to previous file with pending hunks |
 
 ## Architecture
 
 ```
 src/
-  extension.ts              # Entry point — commands, signal file watcher
-  SessionManager.ts         # Snapshot capture, session lifecycle, git capture
-  FileWatcher.ts            # File system watcher, debounced diff computation
-  DiffEngine.ts             # Hunk computation using the diff library
-  HunkStore.ts              # In-memory hunk state (pending/accepted/rejected)
-  SidebarProvider.ts        # Tree view data provider for changed files
-  DiffViewerPanel.ts        # Webview panel for side-by-side diff review
+  extension.ts               # Entry point — commands, signal file watcher
+  SessionManager.ts          # Snapshot capture, session lifecycle, git capture
+  FileWatcher.ts             # File system watcher, debounced diff computation
+  DiffEngine.ts              # Hunk computation using the diff library
+  HunkStore.ts               # In-memory hunk state (pending/accepted/rejected)
+  SidebarProvider.ts         # Tree view data provider for changed files
   InlineDecorationManager.ts # Inline green/red decorations in the editor
-  HunkCodeLensProvider.ts   # Accept/Reject CodeLens buttons above hunks
-  types.ts                  # Shared types (Hunk, FileChangeEntry)
+  HunkCodeLensProvider.ts    # File-level Keep All / Undo All CodeLens
+  HunkInlayHintProvider.ts   # Per-hunk Undo / Keep inlay hint buttons
+  NavigationBarManager.ts    # Status bar hunk/file navigation
+  DiffViewerPanel.ts         # Webview panel for side-by-side diff review
+  types.ts                   # Shared types (Hunk, FileChangeEntry)
 ```
 
 ## Development
@@ -133,10 +147,10 @@ npm run compile
 npx mocha out/test/suite/diffEngine.test.js out/test/suite/hunkStore.test.js --ui tdd
 ```
 
-### Linting
+### Packaging
 
 ```bash
-npm run lint
+npx @vscode/vsce package --allow-missing-repository
 ```
 
 ## Contributing
